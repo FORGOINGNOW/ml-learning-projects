@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battery Discharge Curve Fitting</title>
+  <style>
+    body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: #f7f8fa; color: #202832; }
+    header { padding: 28px 32px 18px; background: #fff; border-bottom: 1px solid #d8dee8; }
+    h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
+    p { color: #657282; }
+    main { max-width: 1240px; margin: 0 auto; padding: 24px 20px 40px; }
+    h2 { margin: 26px 0 12px; font-size: 20px; }
+    .table-wrap, .card { background: #fff; border: 1px solid #d8dee8; border-radius: 8px; }
+    .table-wrap { padding: 12px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid #d8dee8; padding: 10px 12px; text-align: left; white-space: nowrap; }
+    th { color: #657282; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; }
+    .card { padding: 14px; }
+    .card h3 { margin: 0 0 10px; font-size: 15px; color: #657282; }
+    .card img { width: 100%; height: auto; display: block; border: 1px solid #edf0f4; border-radius: 4px; background: white; }
+    @media (max-width: 560px) { header { padding: 22px 18px 14px; } main { padding: 18px 12px 32px; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>锂电池放电曲线拟合实验</h1>
+    <p>DNN 与 1D-CNN 对不同倍率放电电压曲线的拟合、验证与可视化。</p>
+  </header>
+  <main>
+    <h2>Validation Metrics</h2>
+    <section class="table-wrap"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>mae_v</th>
+      <th>rmse_v</th>
+      <th>tail_mae_v</th>
+      <th>tail_rmse_v</th>
+      <th>r2</th>
+      <th>max_abs_error_v</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1D-CNN</td>
+      <td>0.05015</td>
+      <td>0.06898</td>
+      <td>0.03349</td>
+      <td>0.04358</td>
+      <td>0.98255</td>
+      <td>0.39894</td>
+    </tr>
+    <tr>
+      <td>DNN</td>
+      <td>0.05222</td>
+      <td>0.08153</td>
+      <td>0.02266</td>
+      <td>0.03776</td>
+      <td>0.97562</td>
+      <td>0.26583</td>
+    </tr>
+  </tbody>
+</table></section>
+    <h2>Visual Results</h2>
+    <section class="grid"><article class="card"><h3>Discharge Curves by C-rate</h3><img src="data/discharge_curves_by_c_rate.png" alt="Discharge Curves by C-rate"></article><article class="card"><h3>Feature Overview</h3><img src="data/data_feature_overview.png" alt="Feature Overview"></article><article class="card"><h3>Train vs Validation Curves</h3><img src="data/train_valid_curve_comparison.png" alt="Train vs Validation Curves"></article><article class="card"><h3>Prediction Scatter</h3><img src="model/prediction_scatter.png" alt="Prediction Scatter"></article><article class="card"><h3>Absolute Error by C-rate</h3><img src="model/abs_error_by_c_rate.png" alt="Absolute Error by C-rate"></article><article class="card"><h3>curve fit 0.5C</h3><img src="model/curve_fit_0.5C.png" alt="curve fit 0.5C"></article><article class="card"><h3>curve fit 1.0C</h3><img src="model/curve_fit_1.0C.png" alt="curve fit 1.0C"></article><article class="card"><h3>curve fit 1.5C</h3><img src="model/curve_fit_1.5C.png" alt="curve fit 1.5C"></article><article class="card"><h3>curve fit 2.0C</h3><img src="model/curve_fit_2.0C.png" alt="curve fit 2.0C"></article><article class="card"><h3>curve fit 3.0C</h3><img src="model/curve_fit_3.0C.png" alt="curve fit 3.0C"></article><article class="card"><h3>curve fit 4.0C</h3><img src="model/curve_fit_4.0C.png" alt="curve fit 4.0C"></article><article class="card"><h3>curve fit 5.0C</h3><img src="model/curve_fit_5.0C.png" alt="curve fit 5.0C"></article><article class="card"><h3>curve fit 6.0C</h3><img src="model/curve_fit_6.0C.png" alt="curve fit 6.0C"></article></section>
+  </main>
+</body>
+</html>

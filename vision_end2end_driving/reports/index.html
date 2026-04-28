@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vision End-to-End Driving Report</title>
+  <style>
+    body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: #f7f8fa; color: #202832; }
+    header { padding: 28px 32px 18px; background: #fff; border-bottom: 1px solid #d8dee8; }
+    h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
+    p { color: #657282; }
+    main { max-width: 1240px; margin: 0 auto; padding: 24px 20px 40px; }
+    h2 { margin: 26px 0 12px; font-size: 20px; }
+    .table-wrap, .card { background: #fff; border: 1px solid #d8dee8; border-radius: 8px; }
+    .table-wrap { padding: 12px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid #d8dee8; padding: 10px 12px; text-align: left; white-space: nowrap; }
+    th { color: #657282; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; }
+    .card { padding: 14px; }
+    .card h3 { margin: 0 0 10px; font-size: 15px; color: #657282; }
+    .card img { width: 100%; height: auto; display: block; border: 1px solid #edf0f4; border-radius: 4px; background: white; }
+    @media (max-width: 560px) { header { padding: 22px 18px 14px; } main { padding: 18px 12px 32px; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>视觉端到端自动驾驶小项目</h1>
+    <p>从合成数据、清洗、训练、评估到 saliency 解释的完整实验台。</p>
+  </header>
+  <main>
+    <h2>Test Metrics</h2>
+    <section class="table-wrap"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>target</th>
+      <th>mae</th>
+      <th>rmse</th>
+      <th>r2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>steering</td>
+      <td>0.3016</td>
+      <td>0.3735</td>
+      <td>0.0698</td>
+    </tr>
+    <tr>
+      <td>throttle</td>
+      <td>0.1403</td>
+      <td>0.1670</td>
+      <td>-0.0060</td>
+    </tr>
+    <tr>
+      <td>brake</td>
+      <td>0.2973</td>
+      <td>0.3084</td>
+      <td>-0.6422</td>
+    </tr>
+  </tbody>
+</table></section>
+    <h2>Data And Model Results</h2>
+    <section class="grid">
+    <article class="card">
+      <h3>Label Distributions</h3>
+      <img src="data/label_distributions.png" alt="Label Distributions">
+    </article>
+    
+    <article class="card">
+      <h3>Steering vs Curvature</h3>
+      <img src="data/steering_vs_curvature.png" alt="Steering vs Curvature">
+    </article>
+    
+    <article class="card">
+      <h3>Scenario Rates</h3>
+      <img src="data/scenario_rates.png" alt="Scenario Rates">
+    </article>
+    
+    <article class="card">
+      <h3>Sample Grid</h3>
+      <img src="data/sample_grid.png" alt="Sample Grid">
+    </article>
+    
+    <article class="card">
+      <h3>Prediction Scatter</h3>
+      <img src="model/prediction_scatter.png" alt="Prediction Scatter">
+    </article>
+    
+    <article class="card">
+      <h3>Absolute Error</h3>
+      <img src="model/absolute_error_boxplot.png" alt="Absolute Error">
+    </article>
+    
+    <article class="card">
+      <h3>Worst Steering Examples</h3>
+      <img src="model/worst_steering_examples.png" alt="Worst Steering Examples">
+    </article>
+    </section>
+    <h2>Model Explanation</h2>
+    <section class="grid"><p>No saliency images yet.</p></section>
+  </main>
+</body>
+</html>
