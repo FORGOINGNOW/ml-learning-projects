@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CDU Anomaly Detection Report</title>
+  <style>
+    body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: #f7f8fa; color: #1f2933; }
+    header { padding: 28px 32px 18px; background: #fff; border-bottom: 1px solid #d8dee8; }
+    h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
+    p { color: #657282; }
+    main { max-width: 1240px; margin: 0 auto; padding: 24px 20px 40px; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat, .card, .table-wrap { background: #fff; border: 1px solid #d8dee8; border-radius: 8px; }
+    .stat { padding: 14px 16px; }
+    .stat span { display: block; color: #657282; font-size: 13px; }
+    .stat strong { display: block; margin-top: 6px; font-size: 18px; }
+    .table-wrap { overflow-x: auto; padding: 12px; margin-bottom: 22px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid #d8dee8; padding: 10px 12px; text-align: left; white-space: nowrap; }
+    th { color: #657282; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; }
+    .card { padding: 14px; }
+    .card h3 { margin: 0 0 10px; font-size: 15px; color: #657282; }
+    .card img { width: 100%; height: auto; display: block; border: 1px solid #edf0f4; border-radius: 4px; background: white; }
+    @media (max-width: 560px) { header { padding: 22px 18px 14px; } main { padding: 18px 12px 32px; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CDU 异常检测报告</h1>
+    <p>训练阶段不使用 is_abnormal；标签仅用于最终评估。</p>
+  </header>
+  <main>
+    <div class="summary">
+      <div class="stat"><span>Rows</span><strong>2000000</strong></div>
+      <div class="stat"><span>Mechanism Groups</span><strong>60</strong></div>
+      <div class="stat"><span>Expected Rate</span><strong>0.000050</strong></div>
+      <div class="stat"><span>CUDA Device</span><strong>NVIDIA GeForce RTX 3060 Laptop GPU</strong></div>
+    </div>
+    <section class="table-wrap"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>predicted_anomalies</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>roc_auc</th>
+      <th>average_precision</th>
+      <th>tn</th>
+      <th>fp</th>
+      <th>fn</th>
+      <th>tp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>IsolationForest</td>
+      <td>120</td>
+      <td>0.833333</td>
+      <td>1.000000</td>
+      <td>0.909091</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1999880</td>
+      <td>20</td>
+      <td>0</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <td>Groupwise Ensemble</td>
+      <td>120</td>
+      <td>0.833333</td>
+      <td>1.000000</td>
+      <td>0.909091</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1999880</td>
+      <td>20</td>
+      <td>0</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <td>CUDA AutoEncoder</td>
+      <td>120</td>
+      <td>0.825000</td>
+      <td>0.990000</td>
+      <td>0.900000</td>
+      <td>1.000000</td>
+      <td>0.996735</td>
+      <td>1999879</td>
+      <td>21</td>
+      <td>1</td>
+      <td>99</td>
+    </tr>
+  </tbody>
+</table></section>
+    <section class="grid"><article class="card"><h3>01 hidden label distribution</h3><img src="01_hidden_label_distribution.png" alt="01_hidden_label_distribution.png"></article>
+<article class="card"><h3>02 group size c1</h3><img src="02_group_size_c1.png" alt="02_group_size_c1.png"></article>
+<article class="card"><h3>02 group size c2</h3><img src="02_group_size_c2.png" alt="02_group_size_c2.png"></article>
+<article class="card"><h3>02 group size c3</h3><img src="02_group_size_c3.png" alt="02_group_size_c3.png"></article>
+<article class="card"><h3>03 score distribution</h3><img src="03_score_distribution.png" alt="03_score_distribution.png"></article>
+<article class="card"><h3>04 metric comparison</h3><img src="04_metric_comparison.png" alt="04_metric_comparison.png"></article>
+<article class="card"><h3>05 confusion matrices</h3><img src="05_confusion_matrices.png" alt="05_confusion_matrices.png"></article>
+<article class="card"><h3>06 autoencoder training loss</h3><img src="06_autoencoder_training_loss.png" alt="06_autoencoder_training_loss.png"></article>
+<article class="card"><h3>07 autoencoder feature error</h3><img src="07_autoencoder_feature_error.png" alt="07_autoencoder_feature_error.png"></article>
+<article class="card"><h3>08 predicted anomalies c1</h3><img src="08_predicted_anomalies_c1.png" alt="08_predicted_anomalies_c1.png"></article>
+<article class="card"><h3>08 predicted anomalies c2</h3><img src="08_predicted_anomalies_c2.png" alt="08_predicted_anomalies_c2.png"></article>
+<article class="card"><h3>08 predicted anomalies c3</h3><img src="08_predicted_anomalies_c3.png" alt="08_predicted_anomalies_c3.png"></article></section>
+  </main>
+</body>
+</html>

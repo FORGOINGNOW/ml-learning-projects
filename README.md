@@ -39,6 +39,26 @@ cd battery_discharge_cureve_fitting
 python src\run_pipeline.py
 ```
 
+### 3. `cdu_anomaly_detection`
+
+An unsupervised industrial telemetry anomaly detection project:
+
+- feature engineering for CDU/CPU/NPU temperature and power signals
+- mechanism-aware grouping by `a`, `b`, `c`
+- IsolationForest baseline
+- CUDA AutoEncoder neural anomaly detector
+- groupwise percentile ensemble
+- validation using hidden `is_abnormal` labels only after training
+
+Quick run:
+
+```powershell
+cd cdu_anomaly_detection
+python src\cdu_anomaly_detection.py --data cdu_data.csv
+```
+
+The large raw CDU data file is not committed; place it locally before running.
+
 ## Environment
 
 Python 3.10+ is recommended. Install dependencies:

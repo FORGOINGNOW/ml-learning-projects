@@ -1,0 +1,12 @@
+{
+  "rows": 2000000,
+  "columns": 26,
+  "mechanism_groups": 60,
+  "hidden_label_anomalies": 100,
+  "hidden_label_rate": 5e-05,
+  "contamination": 5e-05,
+  "encoded_feature_count": 63,
+  "cuda_device": "NVIDIA GeForce RTX 3060 Laptop GPU",
+  "best_model_by_f1": "IsolationForest",
+  "best_f1": 0.9090909090909091
+}
