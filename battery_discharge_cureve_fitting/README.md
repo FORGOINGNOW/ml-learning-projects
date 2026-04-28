@@ -1,8 +1,7 @@
 # Battery Discharge Curve Fitting
 
-这是一个基于神经网络的锂电池放电曲线拟合小项目，目录名沿用用户要求：
+这是一个基于神经网络的锂电池放电曲线拟合小项目：
 
-`battery_discharge_cureve_fitting`
 
 项目目标：
 
