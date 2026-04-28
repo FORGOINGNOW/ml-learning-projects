@@ -2,13 +2,28 @@
 
 This project demonstrates unsupervised anomaly detection for CDU telemetry.
 
-The original local data file is large and is not committed:
+The synthetic CDU telemetry data used by this project is generated with:
+
+```text
+src/generate_simulating_df.py
+```
+
+Run that script first if you need to recreate the local `cdu_data.csv` / parquet data files.
+
+The generated local data files are large and are not committed:
 
 - `cdu_data.csv`
 - `cdu_data.parquet`
 - `cdu_data_iforest_result.parquet`
 
-Place `cdu_data.csv` in this project folder, or pass a custom path with `--data`.
+Generate or place `cdu_data.csv` in this project folder, or pass a custom path with `--data`.
+
+Example:
+
+```powershell
+python src\generate_simulating_df.py
+python src\cdu_anomaly_detection.py --data cdu_data.csv
+```
 
 ## Data Assumption
 
