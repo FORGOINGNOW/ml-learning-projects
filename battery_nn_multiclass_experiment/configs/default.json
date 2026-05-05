@@ -1,0 +1,33 @@
+{
+  "seed": 42,
+  "rated_capacity_ah": 17.0,
+  "sample_interval_minutes": 2,
+  "days_per_device": 2,
+  "n_cells": 8,
+  "train_devices": 200,
+  "valid_devices": 50,
+  "test_devices": 50,
+  "abnormal_states": [
+    "outliers",
+    "level_shift",
+    "gradual_drift",
+    "battery_replacement",
+    "normal"
+  ],
+  "conditions": [
+    "charge",
+    "discharge"
+  ],
+  "current_deadband_a": 0.05,
+  "epochs": 25,
+  "batch_size": 64,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "dropout": 0.15,
+  "hidden_dims": [
+    192,
+    96,
+    48
+  ],
+  "early_stop_patience": 8
+}

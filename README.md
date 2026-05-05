@@ -1,6 +1,6 @@
 # ML Learning Projects
 
-This repository contains two compact, runnable learning projects built around synthetic data generation, neural-network modeling, training, evaluation, and visual reporting.
+This repository contains compact, runnable machine-learning projects built around synthetic data generation, neural-network modeling, training, evaluation, anomaly detection, and visual reporting.
 
 ## Projects
 
@@ -58,6 +58,33 @@ python src\cdu_anomaly_detection.py --data cdu_data.csv
 ```
 
 The large raw CDU data file is not committed; place it locally before running.
+
+### 4. `battery_nn_multiclass_experiment`
+
+A condition-aware battery state classification project:
+
+- synthetic multi-cell BMS time-series generation
+- feature engineering by device, date, and operating condition
+- separate MLP classifiers for charge and discharge samples
+- sample-level and device-level evaluation
+- normal-vs-abnormal visual comparisons
+- per-anomaly-type feature and time-series plots
+- HTML report under `reports/index.html`
+
+Quick run:
+
+```powershell
+cd battery_nn_multiclass_experiment
+python src\run_pipeline.py
+```
+
+Quick smoke run:
+
+```powershell
+cd battery_nn_multiclass_experiment
+python tests\smoke_test.py
+python src\run_pipeline.py --train-devices 25 --valid-devices 10 --test-devices 10 --days 1 --epochs 2
+```
 
 ## Environment
 
