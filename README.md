@@ -27,10 +27,11 @@ python src\run_pipeline.py --samples 3000
 A lithium battery discharge curve fitting project:
 
 - synthetic discharge data from 0.5C to 6C
-- validation curves with degraded battery capacity
-- DNN and 1D-CNN voltage fitting
-- tail-weighted loss for end-of-discharge accuracy
-- curve visualizations and HTML report
+- normal-only training curves
+- mixed validation curves with degraded battery capacity
+- DNN and 1D-CNN normal-voltage models
+- degradation detection through tail positive residuals
+- curve visualizations, residual scores, and HTML report
 
 Quick run:
 
