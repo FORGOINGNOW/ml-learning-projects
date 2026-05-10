@@ -62,27 +62,48 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     train_parts = []
+    train_meta = []
     for c_rate in cfg["c_rates"]:
         for curve_idx in range(int(cfg["train_curves_per_c"])):
-            if curve_idx % 6 == 0:
-                cap_factor = float(rng.uniform(0.78, 0.90))
-            else:
-                cap_factor = float(np.clip(rng.normal(0.99, 0.025), 0.92, 1.04))
+            cap_factor = float(np.clip(rng.normal(1.0, 0.012), 0.97, 1.03))
             train_parts.append(generate_curve(c_rate, cfg["rated_capacity_ah"], cfg["points_per_curve"], cap_factor, rng))
+            train_meta.append(
+                {
+                    "curve_id": len(train_meta),
+                    "放电倍率": c_rate,
+                    "capacity_factor": cap_factor,
+                    "is_degraded": 0,
+                    "split": "train",
+                }
+            )
     discharge_df = pd.concat(train_parts, ignore_index=True)
 
     valid_parts = []
+    valid_meta = []
     for c_rate in cfg["c_rates"]:
         for curve_idx in range(int(cfg["valid_curves_per_c"])):
             if curve_idx == 0:
                 cap_factor = float(np.clip(rng.normal(0.82, 0.012), 0.78, 0.86))
+                is_degraded = 1
             else:
-                cap_factor = float(np.clip(rng.normal(0.98, 0.02), 0.92, 1.03))
+                cap_factor = float(np.clip(rng.normal(1.0, 0.015), 0.96, 1.03))
+                is_degraded = 0
             valid_parts.append(generate_curve(c_rate, cfg["rated_capacity_ah"], cfg["points_per_curve"], cap_factor, rng))
+            valid_meta.append(
+                {
+                    "curve_id": len(valid_meta),
+                    "放电倍率": c_rate,
+                    "capacity_factor": cap_factor,
+                    "is_degraded": is_degraded,
+                    "split": "valid",
+                }
+            )
     valid_df = pd.concat(valid_parts, ignore_index=True)
 
     discharge_df.to_csv(out_dir / "discharge_df.csv", index=False, encoding="utf-8-sig")
     valid_df.to_csv(out_dir / "valid_df.csv", index=False, encoding="utf-8-sig")
+    pd.DataFrame(train_meta).to_csv(out_dir / "train_curve_meta.csv", index=False, encoding="utf-8-sig")
+    pd.DataFrame(valid_meta).to_csv(out_dir / "valid_curve_meta.csv", index=False, encoding="utf-8-sig")
     print(f"Saved discharge_df: {(out_dir / 'discharge_df.csv').resolve()} rows={len(discharge_df)}")
     print(f"Saved valid_df: {(out_dir / 'valid_df.csv').resolve()} rows={len(valid_df)}")
     print(discharge_df.groupby("放电倍率")["放电电压"].agg(["min", "mean", "max"]).to_string())
