@@ -1,23 +1,36 @@
 {
-  "best_model": "1D-CNN",
-  "metrics": [
+  "normal_fit_metrics": [
+    {
+      "model": "DNN",
+      "subset": "normal_validation",
+      "mae_v": 0.04616698664799892,
+      "rmse_v": 0.06413085001827341,
+      "r2": 0.984866558595754,
+      "max_abs_error_v": 0.2661708020684803
+    },
     {
       "model": "1D-CNN",
-      "mae_v": 0.05015134790282767,
-      "rmse_v": 0.06898417398731928,
-      "tail_mae_v": 0.03348821072811173,
-      "tail_rmse_v": 0.043580402505499966,
-      "r2": 0.9825451148861886,
-      "max_abs_error_v": 0.39894451804036635
+      "subset": "normal_validation",
+      "mae_v": 0.04958085420274267,
+      "rmse_v": 0.06818411816928625,
+      "r2": 0.9828931454364519,
+      "max_abs_error_v": 0.3956825180354957
+    }
+  ],
+  "degradation_detection_metrics": [
+    {
+      "model": "1D-CNN",
+      "degradation_score": "tail_positive_residual_v",
+      "curve_roc_auc": 0.9583333333333334,
+      "normal_mean_score": 0.01904838193929057,
+      "degraded_mean_score": 0.38909418218507263
     },
     {
       "model": "DNN",
-      "mae_v": 0.052219961289139624,
-      "rmse_v": 0.08152752855347703,
-      "tail_mae_v": 0.022655026348941256,
-      "tail_rmse_v": 0.037762958710830075,
-      "r2": 0.9756203979560955,
-      "max_abs_error_v": 0.26582510846490326
+      "degradation_score": "tail_positive_residual_v",
+      "curve_roc_auc": 0.796875,
+      "normal_mean_score": 0.021257807245695537,
+      "degraded_mean_score": 0.3977095008923229
     }
   ]
 }
