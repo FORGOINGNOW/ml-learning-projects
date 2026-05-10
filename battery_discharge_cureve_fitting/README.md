@@ -1,88 +1,109 @@
 # Battery Discharge Curve Fitting
 
-这是一个基于神经网络的锂电池放电曲线拟合小项目：
+This project uses neural networks to learn **normal lithium battery discharge behavior** and then identify degraded validation cells from residual patterns.
 
+The directory name keeps the original spelling:
 
-项目目标：
+```text
+battery_discharge_cureve_fitting
+```
 
-- 生成合成放电数据 `discharge_df.csv`
-- 生成包含容量衰减电池的验证集 `valid_df.csv`
-- 使用 DNN 和 1D-CNN 拟合放电电压
-- 可视化不同倍率下的放电曲线
-- 输出验证指标、预测曲线、误差分析和 HTML 报告
+## Core Logic
 
-## 数据字段
+The training set contains only normal discharge curves. It does **not** contain degraded or abnormal battery curves.
 
-训练集和验证集都保持相同列名：
+The validation set contains a mixture of:
+
+- normal validation curves
+- degraded curves whose actual available capacity is lower, about 82% of the rated capacity
+
+The model is trained as a normal-behavior model. When a degraded cell appears in validation, its measured voltage drops earlier than the normal model expects. The degradation signal is therefore the positive residual:
+
+```text
+normal_model_predicted_voltage - actual_voltage
+```
+
+A large positive residual near the tail of discharge means the cell is declining faster than the normal model predicts.
+
+## Data
+
+Both `discharge_df.csv` and `valid_df.csv` keep the requested four columns:
 
 ```text
 放电时间, 放电倍率, 放电电压, 已放电容量
 ```
 
-默认额定容量为 `17Ah`，放电倍率覆盖：
+Default rated capacity:
+
+```text
+17Ah
+```
+
+C-rate coverage:
 
 ```text
 0.5C, 1C, 1.5C, 2C, 3C, 4C, 5C, 6C
 ```
 
-验证集 `valid_df.csv` 中每个倍率至少包含一条容量衰减曲线，容量约为额定容量的 82%，用于观察模型对退化电池的外推能力。
+Additional curve-level metadata is written separately:
 
-训练集也包含一部分轻重不等的容量衰减曲线。这样做是因为如果训练集中完全没有衰减样本，模型只按额定容量估计 SOC，会在验证集尾部系统性预测偏高。
+- `data/train_curve_meta.csv`
+- `data/valid_curve_meta.csv`
 
-## 一键运行
+These metadata files mark which validation curves are degraded. They are used only for evaluation and plotting, not as model inputs.
 
-在本目录执行：
+## Models
 
-```powershell
-python src\run_pipeline.py
+- `DNN`: point-wise voltage regression model.
+- `1D-CNN`: sequence model that predicts the full voltage curve.
+
+The target is:
+
+```text
+y = 放电电压
 ```
 
-快速验证：
+The model inputs are derived only from rated-capacity features:
 
-```powershell
-python src\run_pipeline.py --epochs 5
-```
-
-## 模型
-
-- `DNN`：逐点回归模型，每个采样点输入特征，输出该点电压。
-- `1D-CNN`：整条曲线序列模型，输入一条放电曲线的特征序列，输出整条电压序列。
-
-原始表中 `y = 放电电压`，其余为基础输入。代码内部会构造派生特征：
-
-- `time_norm`
+- `rated_time_frac`
 - `c_rate`
 - `capacity_norm`
 - `soc_est`
 - `current_a`
 - `c_rate_sq`
-- `sqrt_time_norm`
+- `sqrt_capacity_norm`
+- `tail_progress`
 
-后续版本额外加入了曲线级特征，专门改善尾部拟合：
+No actual curve max capacity, SOH proxy, or degraded label is passed into the model.
 
-- `curve_time_frac`：单条曲线内部的时间进度
-- `curve_capacity_frac`：单条曲线内部的容量进度
-- `curve_soc_est`：基于单条曲线容量的 SOC 估计
-- `soh_proxy`：本条曲线最大放电容量 / 额定容量
-- `tail_progress`：尾部区间权重特征
+## Run
 
-训练时对曲线尾部使用更高 loss 权重，因为放电平台区点数多，普通 MSE 很容易把尾部陡降平均掉。
+```powershell
+python src\run_pipeline.py
+```
 
-## 输出
+Quick verification:
+
+```powershell
+python src\run_pipeline.py --epochs 5
+```
+
+## Outputs
 
 - `data/discharge_df.csv`
 - `data/valid_df.csv`
 - `reports/data/discharge_curves_by_c_rate.png`
-- `reports/model/valid_metrics.csv`
-- `reports/model/curve_fit_*C.png`
-- `reports/model/prediction_scatter.png`
-- `reports/model/abs_error_by_c_rate.png`
+- `reports/model/valid_metrics_normal_only.csv`
+- `reports/model/degradation_detection_metrics.csv`
+- `reports/model/curve_degradation_scores.csv`
+- `reports/model/degraded_curve_residual_*C.png`
+- `reports/model/degradation_residual_scores.png`
+- `reports/model/positive_residual_by_c_rate.png`
 - `reports/index.html`
 - `runs/dnn_best.pt`
 - `runs/cnn1d_best.pt`
-- `runs/fit_logs/metrics.csv` 或 TensorBoard event 文件
 
-如果安装了 TensorBoard：
+If TensorBoard is installed:
 
 ```powershell
 pip install tensorboard
