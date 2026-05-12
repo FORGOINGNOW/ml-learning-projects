@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battery LSTM Residual Anomaly Detection</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; margin: 32px auto; max-width: 1120px; line-height: 1.55; color: #20242a; }
+    h1, h2, h3 { color: #17202a; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0 24px; font-size: 14px; }
+    th, td { border: 1px solid #d6dbe1; padding: 7px 9px; text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    th { background: #f3f6f9; }
+    img { max-width: 100%; border: 1px solid #d8dde3; border-radius: 6px; }
+    code { background: #f3f6f9; padding: 1px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+<h1>Battery LSTM Residual Anomaly Detection Report</h1>
+<h2>Objective</h2>
+<p>This mini-project trains an LSTM forecaster on normal lithium battery BMS sequences.
+At inference time, the model predicts future voltage, temperature, and SOC indicators.
+A residual score above the train-normal high-quantile threshold is flagged as anomalous.</p>
+<h2>Pipeline</h2>
+<ol>
+<li>Simulate physically constrained 8-cell BMS time series.</li>
+<li>Engineer pack-level features such as cell voltage spread, max temperature, SOC spread, current state, time-of-day phase, and throughput.</li>
+<li>Train an LSTM next-horizon forecaster using only normal training devices.</li>
+<li>Score validation and test windows from normalized residuals.</li>
+<li>Use the train residual quantile as the anomaly threshold and evaluate point-level and device-level detection.</li>
+</ol>
+<h2>Key Configuration</h2>
+<ul>
+<li>Rated capacity: <code>17.0 Ah</code></li>
+<li>Cells: <code>8</code></li>
+<li>Sample interval: <code>5 minutes</code></li>
+<li>Sequence length: <code>30</code></li>
+<li>Forecast horizon: <code>3</code></li>
+<li>Threshold quantile: <code>0.985</code></li>
+<li>Learned threshold: <code>1.7281</code></li>
+<li>Best epoch: <code>17</code></li>
+</ul>
+<h2>Split Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>split</th>
+<th>windows</th>
+<th>positives</th>
+<th>threshold</th>
+<th>accuracy</th>
+<th>precision</th>
+<th>recall</th>
+<th>f1</th>
+<th>roc_auc</th>
+<th>average_precision</th>
+<th>tn</th>
+<th>fp</th>
+<th>fn</th>
+<th>tp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>train</td>
+<td>33280</td>
+<td>0</td>
+<td>1.7281</td>
+<td>0.9850</td>
+<td>0.0000</td>
+<td>0.0000</td>
+<td>0.0000</td>
+<td></td>
+<td></td>
+<td>32780</td>
+<td>500</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>valid</td>
+<td>9984</td>
+<td>4160</td>
+<td>1.7281</td>
+<td>0.7309</td>
+<td>0.9445</td>
+<td>0.3762</td>
+<td>0.5381</td>
+<td>0.8035</td>
+<td>0.7969</td>
+<td>5732</td>
+<td>92</td>
+<td>2595</td>
+<td>1565</td>
+</tr>
+<tr>
+<td>test</td>
+<td>13312</td>
+<td>5630</td>
+<td>1.7281</td>
+<td>0.7278</td>
+<td>0.9380</td>
+<td>0.3817</td>
+<td>0.5426</td>
+<td>0.7835</td>
+<td>0.7798</td>
+<td>7540</td>
+<td>142</td>
+<td>3481</td>
+<td>2149</td>
+</tr>
+</tbody>
+</table>
+<h2>State Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>split</th>
+<th>state_label</th>
+<th>windows</th>
+<th>positive_windows</th>
+<th>detected_windows</th>
+<th>detection_rate</th>
+<th>recall_if_abnormal</th>
+<th>mean_score</th>
+<th>p95_score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>valid</td>
+<td>normal</td>
+<td>1664</td>
+<td>0</td>
+<td>29</td>
+<td>0.0174</td>
+<td>0.0000</td>
+<td>0.5878</td>
+<td>1.4037</td>
+</tr>
+<tr>
+<td>valid</td>
+<td>voltage_sag</td>
+<td>1664</td>
+<td>974</td>
+<td>139</td>
+<td>0.0835</td>
+<td>0.1283</td>
+<td>0.9240</td>
+<td>1.9298</td>
+</tr>
+<tr>
+<td>valid</td>
+<td>soc_sensor_drift</td>
+<td>1664</td>
+<td>729</td>
+<td>28</td>
+<td>0.0168</td>
+<td>0.0219</td>
+<td>0.7231</td>
+<td>1.4505</td>
+</tr>
+<tr>
+<td>valid</td>
+<td>resistance_growth</td>
+<td>1664</td>
+<td>715</td>
+<td>347</td>
+<td>0.2085</td>
+<td>0.4769</td>
+<td>1.3715</td>
+<td>5.5027</td>
+</tr>
+<tr>
+<td>valid</td>
+<td>thermal_rise</td>
+<td>1664</td>
+<td>1004</td>
+<td>841</td>
+<td>0.5054</td>
+<td>0.8177</td>
+<td>5.5836</td>
+<td>22.7148</td>
+</tr>
+<tr>
+<td>valid</td>
+<td>cell_imbalance</td>
+<td>1664</td>
+<td>738</td>
+<td>273</td>
+<td>0.1641</td>
+<td>0.3550</td>
+<td>1.2004</td>
+<td>5.1637</td>
+</tr>
+<tr>
+<td>test</td>
+<td>voltage_sag</td>
+<td>2496</td>
+<td>1461</td>
+<td>244</td>
+<td>0.0978</td>
+<td>0.1533</td>
+<td>0.8456</td>
+<td>2.3229</td>
+</tr>
+<tr>
+<td>test</td>
+<td>soc_sensor_drift</td>
+<td>2496</td>
+<td>1196</td>
+<td>45</td>
+<td>0.0180</td>
+<td>0.0242</td>
+<td>0.7806</td>
+<td>1.5303</td>
+</tr>
+<tr>
+<td>test</td>
+<td>cell_imbalance</td>
+<td>1664</td>
+<td>935</td>
+<td>221</td>
+<td>0.1328</td>
+<td>0.2246</td>
+<td>0.9316</td>
+<td>2.9509</td>
+</tr>
+<tr>
+<td>test</td>
+<td>thermal_rise</td>
+<td>2496</td>
+<td>1232</td>
+<td>1189</td>
+<td>0.4764</td>
+<td>0.9351</td>
+<td>6.1463</td>
+<td>22.5943</td>
+</tr>
+<tr>
+<td>test</td>
+<td>resistance_growth</td>
+<td>1664</td>
+<td>806</td>
+<td>548</td>
+<td>0.3293</td>
+<td>0.6625</td>
+<td>2.3059</td>
+<td>8.8801</td>
+</tr>
+<tr>
+<td>test</td>
+<td>normal</td>
+<td>2496</td>
+<td>0</td>
+<td>44</td>
+<td>0.0176</td>
+<td>0.0000</td>
+<td>0.6028</td>
+<td>1.4010</td>
+</tr>
+</tbody>
+</table>
+<h2>Device-Level Summary</h2>
+<ul>
+<li>Abnormal devices detected: <code>23/23</code></li>
+<li>Normal-window false alarm rate: <code>1.73%</code></li>
+<li>Device maintenance decisions should add persistence or hysteresis on top of raw window alarms.</li>
+</ul>
+<h3>Device State Distribution</h3>
+<p><img alt="Device State Distribution" src="data/device_state_distribution.png" /></p>
+<h3>Feature Distributions</h3>
+<p><img alt="Feature Distributions" src="data/feature_distributions.png" /></p>
+<h3>Raw Time-Series Examples</h3>
+<p><img alt="Raw Time-Series Examples" src="data/timeseries_examples.png" /></p>
+<h3>Training Curve</h3>
+<p><img alt="Training Curve" src="model/training_curve.png" /></p>
+<h3>Residual Score Distribution</h3>
+<p><img alt="Residual Score Distribution" src="model/score_distribution.png" /></p>
+<h3>Test Confusion Matrix</h3>
+<p><img alt="Test Confusion Matrix" src="model/test_confusion_matrix.png" /></p>
+<h3>Residual Contributors</h3>
+<p><img alt="Residual Contributors" src="model/residual_contributors.png" /></p>
+<h3>Anomaly Timeline Examples</h3>
+<p><img alt="Anomaly Timeline Examples" src="model/anomaly_timeline_examples.png" /></p>
+<h2>Interpretation</h2>
+<p>The detector is intentionally unsupervised with respect to fault labels: labels are only used for validation.
+Voltage-minimum, voltage-spread, temperature-maximum, temperature-spread, SOC-mean, and SOC-spread residuals are weighted because they map to common BMS risks: cell sag, imbalance, heat rise, and sensor drift.
+The threshold is derived from train-normal residuals, so the operating point is easy to tighten or relax by changing <code>threshold_quantile</code>.</p>
+</body>
+</html>

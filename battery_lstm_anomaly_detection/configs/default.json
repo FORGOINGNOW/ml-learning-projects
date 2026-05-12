@@ -1,0 +1,30 @@
+{
+  "seed": 42,
+  "rated_capacity_ah": 17.0,
+  "n_cells": 8,
+  "sample_interval_minutes": 5,
+  "days_per_device": 3,
+  "train_devices": 40,
+  "valid_devices": 12,
+  "test_devices": 16,
+  "evaluation_states": [
+    "normal",
+    "voltage_sag",
+    "thermal_rise",
+    "soc_sensor_drift",
+    "cell_imbalance",
+    "resistance_growth"
+  ],
+  "seq_len": 30,
+  "forecast_horizon": 3,
+  "epochs": 18,
+  "batch_size": 256,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "hidden_size": 96,
+  "num_layers": 2,
+  "dropout": 0.15,
+  "early_stop_patience": 6,
+  "threshold_quantile": 0.985,
+  "require_cuda": true
+}

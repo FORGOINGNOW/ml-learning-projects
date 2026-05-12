@@ -1,0 +1,9 @@
+{
+  "threshold": 1.7281285345554358,
+  "quantile": 0.985,
+  "train_score_mean": 0.5904592871665955,
+  "train_score_p95": 1.3825196146965026,
+  "train_score_p99": 1.8297942650318144,
+  "best_epoch": 17,
+  "best_val_loss": 0.03331466314204546
+}

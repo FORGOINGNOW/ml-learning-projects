@@ -87,6 +87,31 @@ python tests\smoke_test.py
 python src\run_pipeline.py --train-devices 25 --valid-devices 10 --test-devices 10 --days 1 --epochs 2
 ```
 
+### 5. `battery_lstm_anomaly_detection`
+
+A lithium battery BMS time-series anomaly detection project:
+
+- physically constrained synthetic 8-cell BMS data generation
+- voltage, temperature, SOC, current, throughput, and time-cycle feature engineering
+- CUDA LSTM normal-behavior forecasting model
+- residual-score anomaly detection using train-normal quantile thresholds
+- point-level, state-level, and device-level evaluation
+- generated plots, prediction CSVs, and HTML report under `reports/index.html`
+
+Quick run:
+
+```powershell
+cd battery_lstm_anomaly_detection
+python src\run_pipeline.py
+```
+
+Quick smoke run:
+
+```powershell
+cd battery_lstm_anomaly_detection
+python src\run_pipeline.py --epochs 4 --train-devices 12 --valid-devices 6 --test-devices 6 --days 1
+```
+
 ## Environment
 
 Python 3.10+ is recommended. Install dependencies:

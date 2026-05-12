@@ -1,0 +1,55 @@
+{
+  "threshold": 1.7281285345554358,
+  "model_path": "runs\\models\\lstm_forecaster_best.pt",
+  "prediction_rows": 56576,
+  "metrics_by_split": [
+    {
+      "split": "train",
+      "windows": 33280,
+      "positives": 0,
+      "threshold": 1.7281285345554358,
+      "accuracy": 0.9849759615384616,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "roc_auc": NaN,
+      "average_precision": NaN,
+      "tn": 32780,
+      "fp": 500,
+      "fn": 0,
+      "tp": 0
+    },
+    {
+      "split": "valid",
+      "windows": 9984,
+      "positives": 4160,
+      "threshold": 1.7281285345554358,
+      "accuracy": 0.7308693910256411,
+      "precision": 0.9444779722389861,
+      "recall": 0.3762019230769231,
+      "f1": 0.5380780471033179,
+      "roc_auc": 0.8035029742643174,
+      "average_precision": 0.7969140011816345,
+      "tn": 5732,
+      "fp": 92,
+      "fn": 2595,
+      "tp": 1565
+    },
+    {
+      "split": "test",
+      "windows": 13312,
+      "positives": 5630,
+      "threshold": 1.7281285345554358,
+      "accuracy": 0.7278395432692307,
+      "precision": 0.938018332605849,
+      "recall": 0.38170515097690944,
+      "f1": 0.542608256533266,
+      "roc_auc": 0.7834839164053544,
+      "average_precision": 0.7797627213098385,
+      "tn": 7540,
+      "fp": 142,
+      "fn": 3481,
+      "tp": 2149
+    }
+  ]
+}
